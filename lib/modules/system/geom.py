@@ -141,8 +141,8 @@ def parse_list(output):
 
         items = dict()
         for l in geoms['geom_string'].splitlines():
-            item = l.lower().split(":")
-            items.update({re.sub(r"\s", "_", item[0]).strip(): item[1].strip()})
+            item = l.split(":")
+            items.update({re.sub(r"\s", "_", item[0]).lower().strip(): item[1].strip()})
             if 'geom_name' in items:
                 geom_name = items['geom_name']
                 result.update({geom_name: {k: v for k, v in items.items()}})
@@ -161,8 +161,8 @@ def parse_subsection(section):
     regex = re.compile(r"(?<=\d\.\s).+?(?=\n\S|\n\Z|\Z)", re.S)
     for m in regex.findall(section):
         for l in m.splitlines():
-            item = l.lower().split(":")
-            items.update({re.sub(r'\s', '_', item[0].strip()): item[1].strip()})
+            item = l.split(":")
+            items.update({re.sub(r'\s', '_', item[0].lower().strip()): item[1].strip()})
         if 'name' in items:
             name = items['name']
             result.update({name: {k: v for k, v in items.items()}})
@@ -222,23 +222,27 @@ def run_geom(devclass, command, device):
     return result
 
 
-def main():
+def run_module():
     global module, geom_exec
 
-    changed = False
-    module = AnsibleModule(
-        argument_spec=dict(
-            command=dict(type=str, default='list', choices=['list', 'status']),
-            devclass=dict(type='str', default='part',
-                          choices=['cache', 'concat', 'eli', 'journal', 'label',
-                                   'mirror', 'mountver', 'multipath', 'nop',
-                                   'part', 'raid', 'raid3', 'sched', 'shsec',
-                                   'stripe', 'virstor']
-
-                          ),
-            device=dict(type=str, default=None)
-        )
+    module_args = dict(
+        command=dict(type=str, default='list', choices=['list', 'status']),
+        devclass=dict(type='str', default='part',
+                      choices=['cache', 'concat', 'eli', 'journal', 'label',
+                               'mirror', 'mountver', 'multipath', 'nop',
+                               'part', 'raid', 'raid3', 'sched', 'shsec',
+                               'stripe', 'virstor']
+                     ),
+        device=dict(type=str, default=None)
     )
+
+    changed = False
+
+    module = AnsibleModule(
+        argument_spec=module_args,
+        supports_check_mode=True
+    )
+
     module.run_command_environ_update = dict(LANG='C', LC_ALL='C', LC_MESSAGES='C', LC_CTYPE='C')
 
     command = module.params['command']
@@ -254,6 +258,8 @@ def main():
         geoms=geoms
     )
 
+def main():
+    run_module()
 
 if __name__ == '__main__':
     main()
