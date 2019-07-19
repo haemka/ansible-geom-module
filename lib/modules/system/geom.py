@@ -69,7 +69,8 @@ EXAMPLES = r'''
     
 - name: Get disk device data via geom
   geom:
-    devclass: disk
+    command: status
+    devclass: part
 '''
 
 RETURN = r'''
