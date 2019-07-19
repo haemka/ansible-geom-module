@@ -114,8 +114,11 @@ geom:
       state: "ok"
 '''
 
-from ansible.module_utils.basic import AnsibleModule
+# noinspection PyPep8
 import re
+# noinspection PyPep8
+from ansible.module_utils.basic import AnsibleModule
+
 
 def parse_list(output):
     result = dict()
