@@ -75,14 +75,12 @@ EXAMPLES = r'''
 
 RETURN = r'''
 geom:
-  description: A dictionary containing the returned GEOMs and sub section items
+  description: A list of dictionaries containing the returned GEOMs and sub section items
   returned: success
-  type: dict
+  type: list
   sample:
-    vtbd0:
-      consumers:
-        vtbd0:
-          mediasize: "42949672960 (40g)"
+    - consumers:
+        - mediasize: "42949672960 (40g)"
           mode: "r1w1e2"
           name: "vtbd0"
           sectorsize: "512"
@@ -94,8 +92,7 @@ geom:
       last: "83886040"
       modified: "false"
       providers:
-        vtbd0p1:
-          efimedia: "hd(1,gpt,86e1234b-71e1-11e9-acd0-5bc9b916b6f9,0x28,0x400)"
+        - efimedia: "hd(1,gpt,86e1234b-71e1-11e9-acd0-5bc9b916b6f9,0x28,0x400)"
           end: "1063"
           index: "1"
           label: "freebsd boot"
@@ -122,7 +119,7 @@ from ansible.module_utils.basic import AnsibleModule
 
 
 def parse_list(output):
-    result = dict()
+    result = []
 
     r = re.compile(r"(Geom name:.*?)(?=\n\n|\n?\Z)", re.S)
     matches = r.findall(output)
@@ -143,30 +140,25 @@ def parse_list(output):
         for l in geoms['geom_string'].splitlines():
             item = l.split(":")
             items.update({re.sub(r"\s", "_", item[0]).lower().strip(): item[1].strip()})
-            if 'geom_name' in items:
-                geom_name = items['geom_name']
-                result.update({geom_name: {k: v for k, v in items.items()}})
-                if 'providers_string' in geoms:
-                    result[geom_name].update({'providers': parse_subsection(geoms['providers_string'])})
-                if 'consumers_string' in geoms:
-                    result[geom_name].update({'consumers': parse_subsection(geoms['consumers_string'])})
+            if 'providers_string' in geoms:
+                items.update({'providers': parse_subsection(geoms['providers_string'])})
+            if 'consumers_string' in geoms:
+                items.update({'consumers': parse_subsection(geoms['consumers_string'])})
+        result.append([items])
 
     return result
 
 
 def parse_subsection(section):
     items = dict()
-    result = dict()
+    result = []
 
     regex = re.compile(r"(?<=\d\.\s).+?(?=\n\S|\n\Z|\Z)", re.S)
     for m in regex.findall(section):
         for l in m.splitlines():
             item = l.split(":")
             items.update({re.sub(r'\s', '_', item[0].lower().strip()): item[1].strip()})
-        if 'name' in items:
-            name = items['name']
-            result.update({name: {k: v for k, v in items.items()}})
-
+        result.append(items)
     return result
 
 
