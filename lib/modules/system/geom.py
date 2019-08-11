@@ -141,24 +141,25 @@ def parse_list(output):
             item = l.split(":")
             items.update({re.sub(r"\s", "_", item[0]).lower().strip(): item[1].strip()})
             if 'providers_string' in geoms:
-                items.update({'providers': parse_subsection(geoms['providers_string'])})
+                items['providers'] = parse_subsection(geoms['providers_string'])
             if 'consumers_string' in geoms:
-                items.update({'consumers': parse_subsection(geoms['consumers_string'])})
+                items['consumers'] = parse_subsection(geoms['consumers_string'])
         result.append(items)
 
     return result
 
 
 def parse_subsection(section):
-    items = dict()
     result = []
 
     regex = re.compile(r"(?<=\d\.\s).+?(?=\n\S|\n\Z|\Z)", re.S)
     for m in regex.findall(section):
+        items = dict()
         for l in m.splitlines():
             item = l.split(":")
             items.update({re.sub(r'\s', '_', item[0].lower().strip()): item[1].strip()})
         result.append(items)
+
     return result
 
 
@@ -166,12 +167,14 @@ def parse_status(output):
     result = []
 
     for l in output.splitlines():
-        items = l.split()
-        if items[1] == 'N/A':
-            items[1] = None
-        if items[2] == 'N/A':
-            items[2] = None
-        result.append({'name': items[0], 'status': items[1], 'components': items[2]})
+        items = dict()
+        item = l.split()
+        if item[1] == 'N/A':
+            item[1] = None
+        if item[2] == 'N/A':
+            item[2] = None
+        items.update({'name': item[0], 'status': item[1], 'components': item[2]})
+        result.append(items)
 
     return result
 
