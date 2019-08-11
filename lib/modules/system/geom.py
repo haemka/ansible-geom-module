@@ -144,7 +144,7 @@ def parse_list(output):
                 items.update({'providers': parse_subsection(geoms['providers_string'])})
             if 'consumers_string' in geoms:
                 items.update({'consumers': parse_subsection(geoms['consumers_string'])})
-        result.append([items])
+        result.append(items)
 
     return result
 
@@ -163,7 +163,7 @@ def parse_subsection(section):
 
 
 def parse_status(output):
-    result = dict()
+    result = []
 
     for l in output.splitlines():
         items = l.split()
@@ -171,7 +171,7 @@ def parse_status(output):
             items[1] = None
         if items[2] == 'N/A':
             items[2] = None
-        result.update({items[0]: {'status': items[1], 'components': items[2]}})
+        result.append({'name': items[0], 'status': items[1], 'components': items[2]})
 
     return result
 

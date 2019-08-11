@@ -37,72 +37,68 @@ This module was developed and tested with Ansible 2.8.
 ```
 # ansible example.com -m geom
 example.com | SUCCESS => {
-    "ansible_facts": {
-        "discovered_interpreter_python": "/usr/local/bin/python3.6"
-    },
     "changed": false,
     "geoms": [
-        [
-            {
-                "consumers": [
-                    {
-                        "mediasize": "42949672960 (40G)",
-                        "mode": "r1w1e2",
-                        "name": "vtbd0",
-                        "sectorsize": "512"
-                    }
-                ],
-                "entries": "152",
-                "first": "40",
-                "fwheads": "16",
-                "fwsectors": "63",
-                "geom_name": "vtbd0",
-                "last": "83886040",
-                "modified": "false",
-                "providers": [
-                    {
-                        "efimedia": "HD(2,GPT,8d8691b1-71e1-11e9-acd0-5bc9b916b6f9,0x428,0x13ffbb0)",
-                        "end": "20971479",
-                        "index": "2",
-                        "label": "(null)",
-                        "length": "10736852992",
-                        "mediasize": "10736852992 (10G)",
-                        "mode": "r1w1e1",
-                        "name": "vtbd0p2",
-                        "offset": "544768",
-                        "rawtype": "516e7cb6-6ecf-11d6-8ff8-00022d09712b",
-                        "rawuuid": "8d8691b1-71e1-11e9-acd0-5bc9b916b6f9",
-                        "sectorsize": "512",
-                        "start": "1064",
-                        "stripeoffset": "544768",
-                        "stripesize": "0",
-                        "type": "freebsd-ufs"
-                    },
-                    {
-                        "efimedia": "HD(2,GPT,8d8691b1-71e1-11e9-acd0-5bc9b916b6f9,0x428,0x13ffbb0)",
-                        "end": "20971479",
-                        "index": "2",
-                        "label": "(null)",
-                        "length": "10736852992",
-                        "mediasize": "10736852992 (10G)",
-                        "mode": "r1w1e1",
-                        "name": "vtbd0p2",
-                        "offset": "544768",
-                        "rawtype": "516e7cb6-6ecf-11d6-8ff8-00022d09712b",
-                        "rawuuid": "8d8691b1-71e1-11e9-acd0-5bc9b916b6f9",
-                        "sectorsize": "512",
-                        "start": "1064",
-                        "stripeoffset": "544768",
-                        "stripesize": "0",
-                        "type": "freebsd-ufs"
-                    }
-                ],
-                "scheme": "GPT",
-                "state": "OK"
-            }
-        ]
+        {
+            "consumers": [
+                {
+                    "mediasize": "42949672960 (40G)",
+                    "mode": "r1w1e2",
+                    "name": "vtbd0",
+                    "sectorsize": "512"
+                }
+            ],
+            "entries": "152",
+            "first": "40",
+            "fwheads": "16",
+            "fwsectors": "63",
+            "geom_name": "vtbd0",
+            "last": "83886040",
+            "modified": "false",
+            "providers": [
+                {
+                    "efimedia": "HD(2,GPT,8d8691b1-71e1-11e9-acd0-5bc9b916b6f9,0x428,0x13ffbb0)",
+                    "end": "20971479",
+                    "index": "2",
+                    "label": "(null)",
+                    "length": "10736852992",
+                    "mediasize": "10736852992 (10G)",
+                    "mode": "r1w1e1",
+                    "name": "vtbd0p2",
+                    "offset": "544768",
+                    "rawtype": "516e7cb6-6ecf-11d6-8ff8-00022d09712b",
+                    "rawuuid": "8d8691b1-71e1-11e9-acd0-5bc9b916b6f9",
+                    "sectorsize": "512",
+                    "start": "1064",
+                    "stripeoffset": "544768",
+                    "stripesize": "0",
+                    "type": "freebsd-ufs"
+                },
+                {
+                    "efimedia": "HD(2,GPT,8d8691b1-71e1-11e9-acd0-5bc9b916b6f9,0x428,0x13ffbb0)",
+                    "end": "20971479",
+                    "index": "2",
+                    "label": "(null)",
+                    "length": "10736852992",
+                    "mediasize": "10736852992 (10G)",
+                    "mode": "r1w1e1",
+                    "name": "vtbd0p2",
+                    "offset": "544768",
+                    "rawtype": "516e7cb6-6ecf-11d6-8ff8-00022d09712b",
+                    "rawuuid": "8d8691b1-71e1-11e9-acd0-5bc9b916b6f9",
+                    "sectorsize": "512",
+                    "start": "1064",
+                    "stripeoffset": "544768",
+                    "stripesize": "0",
+                    "type": "freebsd-ufs"
+                }
+            ],
+            "scheme": "GPT",
+            "state": "OK"
+        }
     ]
 }
+
 
 ```
 
@@ -110,19 +106,18 @@ example.com | SUCCESS => {
 ```
 $ ansible example.com -m geom -a command=status
 example.com | SUCCESS => {
-    "ansible_facts": {
-        "discovered_interpreter_python": "/usr/local/bin/python3.6"
-    },
     "changed": false,
-    "geoms": {
-        "vtbd0p1": {
+    "geoms": [
+        {
             "components": "vtbd0",
+            "name": "vtbd0p1",
             "status": "OK"
         },
-        "vtbd0p2": {
+        {
             "components": "vtbd0",
+            "name": "vtbd0p2",
             "status": "OK"
         }
-    }
+    ]
 }
 ```
